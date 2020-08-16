@@ -78,10 +78,28 @@ public class OrderedLinkedListMultiset extends RmitMultiset
     @Override
 	public int search(String item) {
         // Implement me!
+        Node temp = headNode;
+        int totalInstances = 0;
+        while (temp.next != null)
+        {
+            if (temp.data.equals(item))
+            {
+                if (temp.instances > totalInstances)
+                {
+                    totalInstances = temp.instances;
+                }
+            }
+            temp = temp.next;
+        }
 
-
-
-        return searchFailed;
+        if (totalInstances > 0)
+        {
+            return totalInstances;
+        }
+        else
+        {
+            return searchFailed;
+        }
     } // end of search()
 
 
@@ -96,7 +114,15 @@ public class OrderedLinkedListMultiset extends RmitMultiset
     @Override
 	public boolean contains(String item) {
         // Implement me!
-
+        Node temp = headNode;
+        while (temp.next != null)
+        {
+            if (temp.data.equals(item))
+            {
+                return true;
+            }
+            temp = temp.next;
+        }
         // Placeholder, please update.
         return false;
     } // end of contains()
@@ -105,6 +131,24 @@ public class OrderedLinkedListMultiset extends RmitMultiset
     @Override
 	public void removeOne(String item) {
         // Implement me!
+        Node temp1 = headNode;
+        Node temp2 = headNode.next;
+
+        if (temp1.data.equals(item))
+        {
+            headNode = temp1.next;
+            return ;
+        }
+        while (temp2.next != null)
+        {
+            if (temp2.data.equals(item))
+            {
+                temp1.next = temp2.next;
+                return;
+            }
+            temp1 = temp1.next;
+            temp2 = temp2.next;
+        }
     } // end of removeOne()
 
 
