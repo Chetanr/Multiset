@@ -144,6 +144,15 @@ public class OrderedLinkedListMultiset extends RmitMultiset
             if (temp2.data.equals(item))
             {
                 temp1.next = temp2.next;
+                temp2 = temp2.next;
+                while (temp2.next != null)
+                {
+                    if (temp2.data.equals(item))
+                    {
+                        temp2.instances = temp2.instances-1;
+                        return;
+                    }
+                }
                 return;
             }
             temp1 = temp1.next;
