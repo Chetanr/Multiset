@@ -11,18 +11,26 @@ import java.util.List;
 public class OrderedLinkedListMultiset extends RmitMultiset
 {
 
-
-    Node headNode;
+    Node headNode = null;
 
     static class Node
     {
         Node next;
         String data;
-        int instances = 1;
+        int instances;
 
-        public Node(String data)
+        public Node()
         {
+            next = null;
+            data = "";
+            instances = 1;
+        }
+
+        public Node(Node node, String data)
+        {
+            this.next = node;
             this.data = data;
+            this.instances = 1;
         }
     }
 
@@ -31,8 +39,7 @@ public class OrderedLinkedListMultiset extends RmitMultiset
     @Override
 	public void add(String item) {
         // Implement me!
-        Node newNode = new Node(item);
-        newNode.next = null;
+        Node newNode = new Node(null, item);
         int instances = 0;
 
         if(headNode == null)
@@ -65,7 +72,7 @@ public class OrderedLinkedListMultiset extends RmitMultiset
                 {
                     if (temp.data.equals(newNode.data))
                     {
-                        instances++;
+                        instances ++;
                     }
                     newNode.next = temp;
                 }
@@ -149,7 +156,7 @@ public class OrderedLinkedListMultiset extends RmitMultiset
                 {
                     if (temp2.data.equals(item))
                     {
-                        temp2.instances = temp2.instances-1;
+                        temp2.instances = temp2.instances - 1;
                         return;
                     }
                 }
@@ -164,8 +171,33 @@ public class OrderedLinkedListMultiset extends RmitMultiset
     @Override
 	public String print() {
 
+        Node temp = headNode;
+        String list = "";
+        int instance = 0;
+
+        while (temp.next != null)
+        {
+            Node temp2 = temp;
+            instance = temp.instances;
+            while (temp2.next != null)
+            {
+                if (temp.data == temp2.data)
+                {
+                    if (temp2.instances > instance)
+                    {
+                        instance = temp2.instances;
+                    }
+                }
+                temp2 = temp2.next;
+            }
+            list = list.concat(temp.data);
+            list = list.concat(":");
+            list = list + instance;
+            list = list.concat("\n");
+            temp = temp.next;
+        }
         // Placeholder, please update.
-        return new String();
+        return list;
     } // end of OrderedPrint
 
 

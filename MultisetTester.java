@@ -60,7 +60,7 @@ public class MultisetTester
 	 * @param inReader Input reader where the operation commands are coming from.
 	 * @param outWriter Where to output the results of search and print related operations.
 	 * @param creator Factory class to construct appropriate multiset instance.
-	 * @param multisetd Map of id and multiset, used to store the multisets created and operated upon.
+	 * @param multisets Map of id and multiset, used to store the multisets created and operated upon.
 	 *
 	 * @throws IOException If there is an exception to do with I/O.
 	 */
