@@ -13,24 +13,11 @@ public class OrderedLinkedListMultiset extends RmitMultiset
 
     Node headNode;
 
-
-//    public OrderedLinkedListMultiset()
-//    {
-//        headNode = null;
-//    }
-
     static class Node
     {
         Node next;
         String data;
         int instances;
-
-//        public Node(Node node, String item)
-//        {
-//            next = node;
-//            data = item;
-//            instances = 1;
-//        }
 
         public Node (String item)
         {
@@ -39,7 +26,6 @@ public class OrderedLinkedListMultiset extends RmitMultiset
             this.instances = 1;
         }
     }
-
 
 
     @Override
@@ -63,10 +49,18 @@ public class OrderedLinkedListMultiset extends RmitMultiset
                     temp.next = newNode;
 //                    temp = temp.next;
                 }
-                else if (newNode.data.compareTo(temp.data) <= 0)
+                else if (newNode.data.compareTo(temp.data) < 0)
                 {
+//                    if (temp.data.equals(newNode.data))
+//                    {
+//                        newNode.instances++;
+//                    }
                     headNode = newNode;
                     headNode.next = temp;
+                }
+                else if (newNode.data.compareTo(temp.data) == 0)
+                {
+                    temp.instances++;
                 }
             }
             else
@@ -75,8 +69,12 @@ public class OrderedLinkedListMultiset extends RmitMultiset
                 {
                     if (newNode.data.compareTo(temp.data) > 0)
                     {
-                        if (temp.next == null || newNode.data.compareTo(temp.next.data) <= 0)
+                        if (temp.next == null || newNode.data.compareTo(temp.next.data) == 0)
                         {
+                            if (temp.next.data.equals(newNode.data))
+                            {
+                                instances++;
+                            }
                             newNode.instances = instances;
                             newNode.next = temp.next;
                             temp.next = newNode;
@@ -87,20 +85,30 @@ public class OrderedLinkedListMultiset extends RmitMultiset
                             temp = temp.next;
                         }
                     }
-                    else if (newNode.data.compareTo(temp.data) <= 0)
+                    else if (newNode.data.compareTo(temp.data) < 0)
                     {
-                        if (temp.data.equals(newNode.data))
-                        {
-                            instances ++;
-                        }
+//                        if (temp.data.equals(newNode.data))
+//                        {
+//                            newNode.instances++;
+//                        }
                         if (count == 0)
                         {
                             headNode = newNode;
                             headNode.next = temp;
-                            return;
+                            break;
+                        }
+                        else
+                        {
+//                             newNode.instances = instances;
+                             newNode.next = temp.next;
+                             temp.next = newNode;
                         }
 
                         temp = temp.next;
+                    }
+                    else if (newNode.data.compareTo(temp.data) == 0)
+                    {
+                        temp.instances++;
                     }
                     count ++;
                 }
@@ -168,62 +176,63 @@ public class OrderedLinkedListMultiset extends RmitMultiset
 	public void removeOne(String item) {
         // Implement me!
         Node temp1 = headNode;
+//        Node temp2 = temp1;
 
-        Node temp2 = headNode.next;
-
-        if (temp1.data.equals(item))
+        while (temp1.next != null)
         {
-            headNode = temp1.next;
-            return ;
-        }
-        while (temp2.next != null)
-        {
-            if (temp2.data.equals(item))
+            if (temp1.next.data.equals(item))
             {
+                Node temp2 = temp1.next;
                 temp1.next = temp2.next;
-                temp2 = temp2.next;
-                while (temp2.next != null)
-                {
-                    if (temp2.data.equals(item))
-                    {
-                        temp2.instances = temp2.instances - 1;
-                        return;
-                    }
-                }
-                return;
+                break;
             }
-            temp1 = temp1.next;
-            temp2 = temp2.next;
+            else
+            {
+                temp1 = temp1.next;
+            }
         }
+
+
+//        if (temp1.data.equals(item))
+//        {
+//            headNode = temp1.next;
+//            temp1.next = null;
+////            return ;
+//        }
+//        while (temp2.next != null)
+//        {
+//            if (temp2.data.equals(item))
+//            {
+//                temp1.next = temp2.next;
+//                temp2.next = null;
+//                temp2 = temp1.next;
+//                while (temp2.next != null)
+//                {
+//                    if (temp2.data.equals(item))
+//                    {
+//                        temp2.instances = temp2.instances - 1;
+//                    }
+//                    temp2 = temp2.next;
+//                }
+////                temp2.next = null;
+//                break;
+//            }
+//            temp1 = temp1.next;
+//            temp2 = temp2.next;
+//        }
     } // end of removeOne()
 
 
     @Override
 	public String print() {
-
         Node temp = headNode;
         String list = "";
-        int instance = 0;
+        String temp2;
 
         while (temp.next != null)
         {
-            Node temp2 = temp;
-            instance = temp.instances;
-            while (temp2.next != null)
-            {
-                if (temp.data.equals(temp2.data))
-                {
-                    if (temp2.instances > instance)
-                    {
-                        instance = temp2.instances;
-                    }
-                }
-                temp2 = temp2.next;
-            }
-            list = list.concat(temp.data);
-            list = list.concat(":");
-            list = list + instance;
-            list = list.concat("\n");
+            temp2 = temp.data.concat(":" + temp.instances);
+            list = temp2.concat("\n".concat(list));
             temp = temp.next;
         }
         // Placeholder, please update.
