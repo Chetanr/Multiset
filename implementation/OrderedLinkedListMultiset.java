@@ -1,5 +1,6 @@
 package implementation;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -47,14 +48,9 @@ public class OrderedLinkedListMultiset extends RmitMultiset
                 if (newNode.data.compareTo(temp.data) > 0)
                 {
                     temp.next = newNode;
-//                    temp = temp.next;
                 }
                 else if (newNode.data.compareTo(temp.data) < 0)
                 {
-//                    if (temp.data.equals(newNode.data))
-//                    {
-//                        newNode.instances++;
-//                    }
                     headNode = newNode;
                     headNode.next = temp;
                 }
@@ -73,12 +69,21 @@ public class OrderedLinkedListMultiset extends RmitMultiset
                         {
                             if (temp.next.data.equals(newNode.data))
                             {
-                                instances++;
+                                instances = temp.next.instances + 1;
+                                if (temp.next.next == null)
+                                {
+                                    newNode.instances = instances;
+                                    newNode.next = temp.next;
+                                    temp.next = newNode;
+                                    break;
+                                }
+                                else
+                                {
+                                    temp.next.instances++;
+                                    break;
+                                }
                             }
-                            newNode.instances = instances;
-                            newNode.next = temp.next;
-                            temp.next = newNode;
-                            break;
+
                         }
                         else
                         {
@@ -87,10 +92,6 @@ public class OrderedLinkedListMultiset extends RmitMultiset
                     }
                     else if (newNode.data.compareTo(temp.data) < 0)
                     {
-//                        if (temp.data.equals(newNode.data))
-//                        {
-//                            newNode.instances++;
-//                        }
                         if (count == 0)
                         {
                             headNode = newNode;
@@ -99,16 +100,11 @@ public class OrderedLinkedListMultiset extends RmitMultiset
                         }
                         else
                         {
-//                             newNode.instances = instances;
                              newNode.next = temp.next;
                              temp.next = newNode;
                         }
 
                         temp = temp.next;
-                    }
-                    else if (newNode.data.compareTo(temp.data) == 0)
-                    {
-                        temp.instances++;
                     }
                     count ++;
                 }
@@ -149,9 +145,21 @@ public class OrderedLinkedListMultiset extends RmitMultiset
 
     @Override
 	public List<String> searchByInstance(int instanceCount) {
-
         // Placeholder, please update.
-        return null;
+        Node temp = headNode;
+        List<String> list = new ArrayList<>();
+        while (temp.next != null)
+        {
+            if (temp.instances == instanceCount)
+            {
+                list.add(temp.data);
+            }
+            temp = temp.next;
+        }
+        if (list != null)
+            return list;
+        else
+            return null;
     } // end of searchByInstance
 
 
@@ -176,50 +184,27 @@ public class OrderedLinkedListMultiset extends RmitMultiset
 	public void removeOne(String item) {
         // Implement me!
         Node temp1 = headNode;
-//        Node temp2 = temp1;
 
         while (temp1.next != null)
         {
             if (temp1.next.data.equals(item))
             {
-                Node temp2 = temp1.next;
-                temp1.next = temp2.next;
-                break;
+                if (temp1.next.instances > 1)
+                {
+                    temp1.next.instances --;
+                    break;
+                }
+                else {
+                    Node temp2 = temp1.next;
+                    temp1.next = temp2.next;
+                    break;
+                }
             }
             else
             {
                 temp1 = temp1.next;
             }
         }
-
-
-//        if (temp1.data.equals(item))
-//        {
-//            headNode = temp1.next;
-//            temp1.next = null;
-////            return ;
-//        }
-//        while (temp2.next != null)
-//        {
-//            if (temp2.data.equals(item))
-//            {
-//                temp1.next = temp2.next;
-//                temp2.next = null;
-//                temp2 = temp1.next;
-//                while (temp2.next != null)
-//                {
-//                    if (temp2.data.equals(item))
-//                    {
-//                        temp2.instances = temp2.instances - 1;
-//                    }
-//                    temp2 = temp2.next;
-//                }
-////                temp2.next = null;
-//                break;
-//            }
-//            temp1 = temp1.next;
-//            temp2 = temp2.next;
-//        }
     } // end of removeOne()
 
 
@@ -242,9 +227,22 @@ public class OrderedLinkedListMultiset extends RmitMultiset
 
     @Override
 	public String printRange(String lower, String upper) {
+        Node temp = headNode;
 
+        String list = "";
+        while (temp.next != null)
+        {
+            if (temp.data.compareTo(lower) <=0 && temp.data.compareTo(upper) >= 0)
+            {
+                list = list.concat(temp.data);
+            }
+            temp = temp.next;
+        }
         // Placeholder, please update.
-        return new String();
+        if (list != null)
+            return list;
+
+        return null;
     } // end of printRange()
 
 
