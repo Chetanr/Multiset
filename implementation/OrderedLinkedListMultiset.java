@@ -26,6 +26,13 @@ public class OrderedLinkedListMultiset extends RmitMultiset
             this.data = item;
             this.instances = 1;
         }
+
+        public Node ()
+        {
+            this.next = null;
+            this.data = null;
+            this.instances = 1;
+        }
     }
 
 
@@ -249,13 +256,67 @@ public class OrderedLinkedListMultiset extends RmitMultiset
     @Override
 	public RmitMultiset union(RmitMultiset other) {
 
+        OrderedLinkedListMultiset unionList = new OrderedLinkedListMultiset();
+        OrderedLinkedListMultiset input = (OrderedLinkedListMultiset) other;
+
+        Node temp = headNode.next;
+
+
+        unionList.headNode = headNode;
+
+        Node temp2 = unionList.headNode;
+
+        Node temp3 = input.headNode;
+
+
+
+        while (temp.next != null)
+        {
+            Node newNode = new Node();
+            newNode.data = temp.data;
+            newNode.instances = temp.instances;
+            newNode.next = temp.next;
+
+            temp2.next = newNode;
+
+            temp = temp.next;
+            temp2 = temp2.next;
+        }
+
+
+        while (temp.next != null)
+        {
+//            Node temp3 = temp2;
+            while (temp3.next != null)
+            {
+                if (temp3.data.equals(temp2.data))
+                {
+                    temp2.instances = temp2.instances + temp3.instances;
+                    break;
+                }
+                temp3 = temp3.next;
+            }
+
+            if (temp3.next == null)
+            {
+                Node node = new Node();
+                node.data = temp2.data;
+                node.instances = temp2.instances;
+                node.next = temp2.next;
+
+                temp2.next = node;
+            }
+
+            temp = temp.next;
+        }
         // Placeholder, please update.
-        return null;
+        return unionList;
     } // end of union()
 
 
     @Override
 	public RmitMultiset intersect(RmitMultiset other) {
+
 
         // Placeholder, please update.
         return null;
