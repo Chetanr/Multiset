@@ -13,6 +13,8 @@ public class DualLinkedListMultiset extends RmitMultiset
 
     @Override
 	public void add(String item) {
+        OrderedLinkedListMultiset list = new OrderedLinkedListMultiset();
+        list.add(item);
         // Implement me!
     } // end of add()
 

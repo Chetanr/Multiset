@@ -45,7 +45,7 @@ public class OrderedLinkedListMultiset extends RmitMultiset
 
         if(headNode == null)
         {
-            headNode = newNode;
+            this.headNode = newNode;
         }
         else
         {
@@ -58,8 +58,8 @@ public class OrderedLinkedListMultiset extends RmitMultiset
                 }
                 else if (newNode.data.compareTo(temp.data) < 0)
                 {
-                    headNode = newNode;
-                    headNode.next = temp;
+                    this.headNode = newNode;
+                    this.headNode.next = temp;
                 }
                 else if (newNode.data.compareTo(temp.data) == 0)
                 {
@@ -101,8 +101,8 @@ public class OrderedLinkedListMultiset extends RmitMultiset
                     {
                         if (count == 0)
                         {
-                            headNode = newNode;
-                            headNode.next = temp;
+                            this.headNode = newNode;
+                            this.headNode.next = temp;
                             break;
                         }
                         else
@@ -173,7 +173,7 @@ public class OrderedLinkedListMultiset extends RmitMultiset
     @Override
 	public boolean contains(String item) {
         // Implement me!
-        Node temp = headNode;
+        Node temp = this.headNode;
         while (temp.next != null)
         {
             if (temp.data.equals(item))
@@ -190,7 +190,7 @@ public class OrderedLinkedListMultiset extends RmitMultiset
     @Override
 	public void removeOne(String item) {
         // Implement me!
-        Node temp1 = headNode;
+        Node temp1 = this.headNode;
 
         while (temp1.next != null)
         {
@@ -217,7 +217,7 @@ public class OrderedLinkedListMultiset extends RmitMultiset
 
     @Override
 	public String print() {
-        Node temp = headNode;
+        Node temp = this.headNode;
         String list = "";
         String temp2;
 
@@ -234,7 +234,7 @@ public class OrderedLinkedListMultiset extends RmitMultiset
 
     @Override
 	public String printRange(String lower, String upper) {
-        Node temp = headNode;
+        Node temp = this.headNode;
 
         String list = "";
         while (temp.next != null)
@@ -316,7 +316,6 @@ public class OrderedLinkedListMultiset extends RmitMultiset
 
     @Override
 	public RmitMultiset intersect(RmitMultiset other) {
-
 
         // Placeholder, please update.
         return null;
