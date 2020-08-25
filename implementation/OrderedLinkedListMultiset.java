@@ -49,7 +49,7 @@ public class OrderedLinkedListMultiset extends RmitMultiset
         }
         else
         {
-            Node temp = headNode;
+            Node temp = this.headNode;
             if (temp.next == null)
             {
                 if (newNode.data.compareTo(temp.data) > 0)
@@ -125,7 +125,7 @@ public class OrderedLinkedListMultiset extends RmitMultiset
     @Override
 	public int search(String item) {
         // Implement me!
-        Node temp = headNode;
+        Node temp = this.headNode;
         int totalInstances = 0;
         while (temp.next != null)
         {
@@ -153,7 +153,7 @@ public class OrderedLinkedListMultiset extends RmitMultiset
     @Override
 	public List<String> searchByInstance(int instanceCount) {
         // Placeholder, please update.
-        Node temp = headNode;
+        Node temp = this.headNode;
         List<String> list = new ArrayList<>();
         while (temp.next != null)
         {
@@ -259,10 +259,10 @@ public class OrderedLinkedListMultiset extends RmitMultiset
         OrderedLinkedListMultiset unionList = new OrderedLinkedListMultiset();
         OrderedLinkedListMultiset input = (OrderedLinkedListMultiset) other;
 
-        Node temp = headNode.next;
+        Node temp = this.headNode.next;
 
 
-        unionList.headNode = headNode;
+        unionList.headNode = this.headNode;
 
         Node temp2 = unionList.headNode;
 

@@ -1,5 +1,6 @@
 package implementation;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -8,86 +9,154 @@ import java.util.List;
  *
  * @author Jeffrey Chan & Yongli Ren, RMIT 2020
  */
+
 public class DualLinkedListMultiset extends RmitMultiset
 {
+    OrderedLinkedListMultiset list = new OrderedLinkedListMultiset();
+
+    Node headNode;
+
+    static class Node
+    {
+        Node next;
+        String data;
+        int instances;
+
+        public Node (String item)
+        {
+            this.next = null;
+            this.data = item;
+            this.instances = 1;
+        }
+
+        public Node ()
+        {
+            this.next = null;
+            this.data = null;
+            this.instances = 1;
+        }
+    }
+
+
 
     @Override
 	public void add(String item) {
-        OrderedLinkedListMultiset list = new OrderedLinkedListMultiset();
+
+        //using the same implementeation of Ordered linked list for alphabetical ordering
         list.add(item);
-        // Implement me!
-    } // end of add()
+
+        Node newNode = new Node(item);
+
+        if(headNode == null)
+        {
+            this.headNode = newNode;
+        }
+        else
+        {
+            Node temp = this.headNode;
+            while (temp.next !=null)
+            {
+                if (newNode.data.compareTo(temp.data) == 0)
+                {
+                    temp.instances = temp.instances++;
+                    return;
+                }
+                else
+                {
+                    temp = temp.next;
+                }
+            }
+            if (temp.next == null)
+            {
+                temp.next = newNode;
+            }
+        }
+
+    }
 
 
     @Override
 	public int search(String item) {
-        // Implement me!
 
-        // Placeholder, please update.
+        if (list.search(item) != searchFailed)
+            return list.search(item);
+
         return searchFailed;
-    } // end of search()
+    }
 
 
     @Override
 	public List<String> searchByInstance(int instanceCount) {
 
-        // Placeholder, please update.
-        return null;
+        Node temp = this.headNode;
+        List<String> list = new ArrayList<>();
+
+        while (temp.next != null)
+        {
+            if (temp.instances == instanceCount)
+            {
+                list.add(temp.data);
+            }
+            temp = temp.next;
+        }
+        if (list != null)
+            return list;
+        else
+            return null;
     } // end of searchByInstance    
 
 
     @Override
 	public boolean contains(String item) {
-        // Implement me!
-
-        // Placeholder, please update.
+        if (list.contains(item))
+            return list.contains(item);
         return false;
-    } // end of contains()
+    }
 
 
     @Override
 	public void removeOne(String item) {
-        // Implement me!
-    } // end of removeOne()
+        list.removeOne(item);
+    }
 
 
     @Override
 	public String print() {
+        String output = list.print();
 
-        // Placeholder, please update.
-        return new String();
-    } // end of OrderedPrint
+        return output;
+    }
 
 
     @Override
 	public String printRange(String lower, String upper) {
 
-        // Placeholder, please update.
-        return new String();
-    } // end of printRange()
+        String output = list.printRange(lower, upper);
+        return output;
+    }
 
 
     @Override
 	public RmitMultiset union(RmitMultiset other) {
 
-        // Placeholder, please update.
+
         return null;
-    } // end of union()
+    }
 
 
     @Override
 	public RmitMultiset intersect(RmitMultiset other) {
 
-        // Placeholder, please update.
+
         return null;
-    } // end of intersect()
+    }
 
 
     @Override
 	public RmitMultiset difference(RmitMultiset other) {
 
-        // Placeholder, please update.
+
         return null;
-    } // end of difference()
+    }
 
 } // end of class DualLinkedListMultiset
