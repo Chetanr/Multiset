@@ -88,22 +88,11 @@ public class DualLinkedListMultiset extends RmitMultiset
     @Override
 	public List<String> searchByInstance(int instanceCount) {
 
-        Node temp = this.headNode;
-        List<String> list = new ArrayList<>();
-
-        while (temp.next != null)
-        {
-            if (temp.instances == instanceCount)
-            {
-                list.add(temp.data);
-            }
-            temp = temp.next;
-        }
-        if (list != null)
-            return list;
+        if (list.searchByInstance(instanceCount) != null)
+            return list.searchByInstance(instanceCount);
         else
             return null;
-    } // end of searchByInstance    
+    }
 
 
     @Override

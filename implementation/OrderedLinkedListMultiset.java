@@ -9,10 +9,12 @@ import java.util.List;
  *
  * @author Jeffrey Chan & Yongli Ren, RMIT 2020
  */
+
+
+
 public class OrderedLinkedListMultiset extends RmitMultiset
 {
-
-    Node headNode;
+    Node headNode = null;
 
     static class Node
     {
@@ -20,9 +22,9 @@ public class OrderedLinkedListMultiset extends RmitMultiset
         String data;
         int instances;
 
-        public Node (String item)
+        public Node (Node node, String item)
         {
-            this.next = null;
+            this.next = node;
             this.data = item;
             this.instances = 1;
         }
@@ -35,15 +37,13 @@ public class OrderedLinkedListMultiset extends RmitMultiset
         }
     }
 
-
     @Override
 	public void add(String item) {
-        // Implement me!
-        Node newNode = new Node(item);
+
+        Node newNode = new Node(null, item);
         int instances = 1;
         int count = 0;
-
-        if(headNode == null)
+        if(this.headNode == null)
         {
             this.headNode = newNode;
         }
@@ -55,6 +55,7 @@ public class OrderedLinkedListMultiset extends RmitMultiset
                 if (newNode.data.compareTo(temp.data) > 0)
                 {
                     temp.next = newNode;
+//                    return;
                 }
                 else if (newNode.data.compareTo(temp.data) < 0)
                 {
@@ -64,6 +65,7 @@ public class OrderedLinkedListMultiset extends RmitMultiset
                 else if (newNode.data.compareTo(temp.data) == 0)
                 {
                     temp.instances++;
+                    return ;
                 }
             }
             else
@@ -113,18 +115,19 @@ public class OrderedLinkedListMultiset extends RmitMultiset
 
                         temp = temp.next;
                     }
+                    else if (newNode.data.compareTo(temp.data) < 0)
+                    {
+                        temp.instances++;
+                    }
                     count ++;
                 }
             }
 
         }
-
-    } // end of add()
-
+    }
 
     @Override
 	public int search(String item) {
-        // Implement me!
         Node temp = this.headNode;
         int totalInstances = 0;
         while (temp.next != null)
@@ -147,12 +150,11 @@ public class OrderedLinkedListMultiset extends RmitMultiset
         {
             return searchFailed;
         }
-    } // end of search()
+    }
 
 
     @Override
 	public List<String> searchByInstance(int instanceCount) {
-        // Placeholder, please update.
         Node temp = this.headNode;
         List<String> list = new ArrayList<>();
         while (temp.next != null)
@@ -167,12 +169,11 @@ public class OrderedLinkedListMultiset extends RmitMultiset
             return list;
         else
             return null;
-    } // end of searchByInstance
+    }
 
 
     @Override
 	public boolean contains(String item) {
-        // Implement me!
         Node temp = this.headNode;
         while (temp.next != null)
         {
@@ -182,14 +183,12 @@ public class OrderedLinkedListMultiset extends RmitMultiset
             }
             temp = temp.next;
         }
-        // Placeholder, please update.
         return false;
-    } // end of contains()
+    }
 
 
     @Override
 	public void removeOne(String item) {
-        // Implement me!
         Node temp1 = this.headNode;
 
         while (temp1.next != null)
@@ -212,7 +211,7 @@ public class OrderedLinkedListMultiset extends RmitMultiset
                 temp1 = temp1.next;
             }
         }
-    } // end of removeOne()
+    }
 
 
     @Override
@@ -227,9 +226,15 @@ public class OrderedLinkedListMultiset extends RmitMultiset
             list = temp2.concat("\n".concat(list));
             temp = temp.next;
         }
-        // Placeholder, please update.
+        if (temp.next == null)
+        {
+            temp2 = temp.data.concat(":" + temp.instances);
+            list = temp2.concat("\n".concat(list));
+        }
+
+        System.out.println(list);
         return list;
-    } // end of OrderedPrint
+    }
 
 
     @Override
@@ -245,26 +250,26 @@ public class OrderedLinkedListMultiset extends RmitMultiset
             }
             temp = temp.next;
         }
-        // Placeholder, please update.
         if (list != null)
             return list;
 
         return null;
-    } // end of printRange()
+    }
 
 
     @Override
 	public RmitMultiset union(RmitMultiset other) {
 
-        OrderedLinkedListMultiset unionList = new OrderedLinkedListMultiset();
+        RmitMultiset unionList = new OrderedLinkedListMultiset();
         OrderedLinkedListMultiset input = (OrderedLinkedListMultiset) other;
+
 
         Node temp = this.headNode.next;
 
 
-        unionList.headNode = this.headNode;
+        ((OrderedLinkedListMultiset) unionList).headNode = this.headNode;
 
-        Node temp2 = unionList.headNode;
+        Node temp2 = ((OrderedLinkedListMultiset) unionList).headNode;
 
         Node temp3 = input.headNode;
 
@@ -286,7 +291,6 @@ public class OrderedLinkedListMultiset extends RmitMultiset
 
         while (temp.next != null)
         {
-//            Node temp3 = temp2;
             while (temp3.next != null)
             {
                 if (temp3.data.equals(temp2.data))
@@ -309,24 +313,19 @@ public class OrderedLinkedListMultiset extends RmitMultiset
 
             temp = temp.next;
         }
-        // Placeholder, please update.
         return unionList;
-    } // end of union()
+    }
 
 
     @Override
 	public RmitMultiset intersect(RmitMultiset other) {
-
-        // Placeholder, please update.
         return null;
-    } // end of intersect()
+    }
 
 
     @Override
 	public RmitMultiset difference(RmitMultiset other) {
-
-        // Placeholder, please update.
         return null;
-    } // end of difference()
+    }
 
-} // end of class OrderedLinkedListMultiset
+}
