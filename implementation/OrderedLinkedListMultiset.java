@@ -10,32 +10,30 @@ import java.util.List;
  * @author Jeffrey Chan & Yongli Ren, RMIT 2020
  */
 
+class Node
+{
+    Node next;
+    String data;
+    int instances;
 
+    public Node (Node node, String item)
+    {
+        this.next = node;
+        this.data = item;
+        this.instances = 1;
+    }
+
+    public Node ()
+    {
+        this.next = null;
+        this.data = null;
+        this.instances = 1;
+    }
+}
 
 public class OrderedLinkedListMultiset extends RmitMultiset
 {
-    Node headNode = null;
-
-    static class Node
-    {
-        Node next;
-        String data;
-        int instances;
-
-        public Node (Node node, String item)
-        {
-            this.next = node;
-            this.data = item;
-            this.instances = 1;
-        }
-
-        public Node ()
-        {
-            this.next = null;
-            this.data = null;
-            this.instances = 1;
-        }
-    }
+    Node headNode;
 
     @Override
 	public void add(String item) {
@@ -55,12 +53,13 @@ public class OrderedLinkedListMultiset extends RmitMultiset
                 if (newNode.data.compareTo(temp.data) > 0)
                 {
                     temp.next = newNode;
-//                    return;
+                    return;
                 }
                 else if (newNode.data.compareTo(temp.data) < 0)
                 {
                     this.headNode = newNode;
                     this.headNode.next = temp;
+                    return;
                 }
                 else if (newNode.data.compareTo(temp.data) == 0)
                 {
@@ -72,7 +71,12 @@ public class OrderedLinkedListMultiset extends RmitMultiset
             {
                 while (temp.next != null)
                 {
-                    if (newNode.data.compareTo(temp.data) > 0)
+                    if (newNode.data.compareTo(temp.data) ==  0)
+                    {
+                        temp.instances++;
+                        break;
+                    }
+                    else if (newNode.data.compareTo(temp.data) > 0)
                     {
                         if (temp.next == null || newNode.data.compareTo(temp.next.data) == 0)
                         {
@@ -93,6 +97,12 @@ public class OrderedLinkedListMultiset extends RmitMultiset
                                 }
                             }
 
+                        }
+                        else if (newNode.data.compareTo(temp.next.data) < 0)
+                        {
+                            newNode.next = temp.next;
+                            temp.next = newNode;
+                            break;
                         }
                         else
                         {
@@ -115,15 +125,13 @@ public class OrderedLinkedListMultiset extends RmitMultiset
 
                         temp = temp.next;
                     }
-                    else if (newNode.data.compareTo(temp.data) < 0)
-                    {
-                        temp.instances++;
-                    }
+
                     count ++;
                 }
             }
 
         }
+
     }
 
     @Override
@@ -220,19 +228,34 @@ public class OrderedLinkedListMultiset extends RmitMultiset
         String list = "";
         String temp2;
 
-        while (temp.next != null)
+//        temp2 = temp.data.concat(":" + temp.instances);
+//        list = temp2.concat("\n".concat(list));
+//        temp = temp.next;
+
+        while (temp != null)
         {
             temp2 = temp.data.concat(":" + temp.instances);
             list = temp2.concat("\n".concat(list));
             temp = temp.next;
         }
-        if (temp.next == null)
-        {
-            temp2 = temp.data.concat(":" + temp.instances);
-            list = temp2.concat("\n".concat(list));
-        }
+//
+//        if (temp.next != null)
+//        {
+//            temp = temp.next;
+//            while (temp.next != null)
+//            {
+//                temp2 = temp.data.concat(":" + temp.instances);
+//                list = temp2.concat("\n".concat(list));
+//                temp = temp.next;
+//            }
+//        }
+//
+//        if (temp.next == null)
+//        {
+//            temp2 = temp.data.concat(":" + temp.instances);
+//            list = temp2.concat("\n".concat(list));
+//        }
 
-        System.out.println(list);
         return list;
     }
 
@@ -244,14 +267,14 @@ public class OrderedLinkedListMultiset extends RmitMultiset
         String list = "";
         while (temp.next != null)
         {
-            if (temp.data.compareTo(lower) <=0 && temp.data.compareTo(upper) >= 0)
+            if (temp.data.compareTo(lower) >=0 && temp.data.compareTo(upper) <= 0)
             {
-                list = list.concat(temp.data);
+                list = list.concat(temp.data.concat(" "));
             }
             temp = temp.next;
         }
         if (list != null)
-            return list;
+            return list.concat("\n");
 
         return null;
     }
@@ -265,6 +288,7 @@ public class OrderedLinkedListMultiset extends RmitMultiset
 
 
         Node temp = this.headNode.next;
+        int found = 0;
 
 
         ((OrderedLinkedListMultiset) unionList).headNode = this.headNode;
@@ -296,12 +320,14 @@ public class OrderedLinkedListMultiset extends RmitMultiset
                 if (temp3.data.equals(temp2.data))
                 {
                     temp2.instances = temp2.instances + temp3.instances;
+                    found = 1;
                     break;
                 }
+
                 temp3 = temp3.next;
             }
 
-            if (temp3.next == null)
+            if (found == 0)
             {
                 Node node = new Node();
                 node.data = temp2.data;
