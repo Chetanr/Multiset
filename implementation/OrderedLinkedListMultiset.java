@@ -10,30 +10,32 @@ import java.util.List;
  * @author Jeffrey Chan & Yongli Ren, RMIT 2020
  */
 
-class Node
-{
-    Node next;
-    String data;
-    int instances;
 
-    public Node (Node node, String item)
-    {
-        this.next = node;
-        this.data = item;
-        this.instances = 1;
-    }
-
-    public Node ()
-    {
-        this.next = null;
-        this.data = null;
-        this.instances = 1;
-    }
-}
 
 public class OrderedLinkedListMultiset extends RmitMultiset
 {
     Node headNode;
+
+    class Node
+    {
+        Node next;
+        String data;
+        int instances;
+
+        public Node (Node node, String item)
+        {
+            this.next = node;
+            this.data = item;
+            this.instances = 1;
+        }
+
+        public Node ()
+        {
+            this.next = null;
+            this.data = null;
+            this.instances = 1;
+        }
+    }
 
     @Override
 	public void add(String item) {
@@ -129,9 +131,7 @@ public class OrderedLinkedListMultiset extends RmitMultiset
                     count ++;
                 }
             }
-
         }
-
     }
 
     @Override
@@ -228,33 +228,12 @@ public class OrderedLinkedListMultiset extends RmitMultiset
         String list = "";
         String temp2;
 
-//        temp2 = temp.data.concat(":" + temp.instances);
-//        list = temp2.concat("\n".concat(list));
-//        temp = temp.next;
-
         while (temp != null)
         {
             temp2 = temp.data.concat(":" + temp.instances);
             list = temp2.concat("\n".concat(list));
             temp = temp.next;
         }
-//
-//        if (temp.next != null)
-//        {
-//            temp = temp.next;
-//            while (temp.next != null)
-//            {
-//                temp2 = temp.data.concat(":" + temp.instances);
-//                list = temp2.concat("\n".concat(list));
-//                temp = temp.next;
-//            }
-//        }
-//
-//        if (temp.next == null)
-//        {
-//            temp2 = temp.data.concat(":" + temp.instances);
-//            list = temp2.concat("\n".concat(list));
-//        }
 
         return list;
     }
@@ -269,7 +248,7 @@ public class OrderedLinkedListMultiset extends RmitMultiset
         {
             if (temp.data.compareTo(lower) >=0 && temp.data.compareTo(upper) <= 0)
             {
-                list = list.concat(temp.data.concat(" "));
+                list = list.concat(temp.data.concat(":" + (temp.instances + "\n")));
             }
             temp = temp.next;
         }
@@ -345,7 +324,48 @@ public class OrderedLinkedListMultiset extends RmitMultiset
 
     @Override
 	public RmitMultiset intersect(RmitMultiset other) {
-        return null;
+
+        RmitMultiset list = new OrderedLinkedListMultiset();
+        OrderedLinkedListMultiset input = (OrderedLinkedListMultiset) other;
+
+        Node temp = this.headNode;
+
+        ((OrderedLinkedListMultiset) list).headNode = null;
+
+        Node temp3 = ((OrderedLinkedListMultiset) list).headNode;
+
+
+        while(temp != null)
+        {
+            Node temp2 = input.headNode;
+
+            while (temp2 != null)
+            {
+                if (temp.data.compareTo(temp2.data) == 0)
+                {
+                    System.out.println("Inter" + temp2.data);
+                    if (((OrderedLinkedListMultiset) list).headNode == null)
+                    {
+                        temp3 = temp2;
+                        temp3.instances = temp2.instances + temp.instances;
+                        System.out.println("temp 3" + temp3.data);
+                        temp3 = temp3.next;
+                        break;
+                    }
+                    else
+                    {
+                        temp3.next = temp2;
+                        temp3.instances = temp2.instances + temp.instances;
+                        System.out.println("temp 3" + temp3.data);
+                        break;
+                    }
+                }
+
+                temp2 = temp2.next;
+            }
+            temp = temp.next;
+        }
+        return list;
     }
 
 
