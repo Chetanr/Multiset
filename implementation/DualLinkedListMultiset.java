@@ -129,15 +129,13 @@ public class DualLinkedListMultiset extends RmitMultiset
 	public RmitMultiset union(RmitMultiset other) {
 
 
-        return null;
+        return list.union(other);
     }
 
 
     @Override
 	public RmitMultiset intersect(RmitMultiset other) {
-
-
-        return null;
+        return list.intersect(other);
     }
 
 
@@ -145,7 +143,6 @@ public class DualLinkedListMultiset extends RmitMultiset
 	public RmitMultiset difference(RmitMultiset other) {
 
 
-        return null;
+        return list.difference(other);
     }
-
-} // end of class DualLinkedListMultiset
+}

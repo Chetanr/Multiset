@@ -14,7 +14,10 @@ import java.util.List;
 
 public class OrderedLinkedListMultiset extends RmitMultiset
 {
-    Node headNode;
+
+    Node headNode = null;
+    Node node;
+    Node temp;
 
     class Node
     {
@@ -35,6 +38,7 @@ public class OrderedLinkedListMultiset extends RmitMultiset
             this.data = null;
             this.instances = 1;
         }
+
     }
 
     @Override
@@ -321,43 +325,39 @@ public class OrderedLinkedListMultiset extends RmitMultiset
         return unionList;
     }
 
-
     @Override
-	public RmitMultiset intersect(RmitMultiset other) {
+    public RmitMultiset intersect(RmitMultiset other) {
 
-        RmitMultiset list = new OrderedLinkedListMultiset();
+        OrderedLinkedListMultiset list = new OrderedLinkedListMultiset();
         OrderedLinkedListMultiset input = (OrderedLinkedListMultiset) other;
 
         Node temp = this.headNode;
-
-        ((OrderedLinkedListMultiset) list).headNode = null;
-
-        Node temp3 = ((OrderedLinkedListMultiset) list).headNode;
-
+        list.headNode = null;
 
         while(temp != null)
         {
             Node temp2 = input.headNode;
-
             while (temp2 != null)
             {
                 if (temp.data.compareTo(temp2.data) == 0)
                 {
-                    System.out.println("Inter" + temp2.data);
-                    if (((OrderedLinkedListMultiset) list).headNode == null)
+                    Node temp3 = new Node(null, temp2.data);
+                    if (list.headNode == null)
                     {
-                        temp3 = temp2;
-                        temp3.instances = temp2.instances + temp.instances;
-                        System.out.println("temp 3" + temp3.data);
-                        temp3 = temp3.next;
-                        break;
+                        list.headNode = temp3;
                     }
                     else
                     {
-                        temp3.next = temp2;
-                        temp3.instances = temp2.instances + temp.instances;
-                        System.out.println("temp 3" + temp3.data);
-                        break;
+                        OrderedLinkedListMultiset tempList = new OrderedLinkedListMultiset();
+                        tempList.temp = list.headNode;
+
+                        while (tempList.temp.next != null)
+                        {
+                            tempList.temp = tempList.temp.next;
+
+                        }
+                        temp3 = new Node(null, temp3.data);
+                        tempList.temp.next = temp3;
                     }
                 }
 
@@ -369,9 +369,62 @@ public class OrderedLinkedListMultiset extends RmitMultiset
     }
 
 
+
     @Override
 	public RmitMultiset difference(RmitMultiset other) {
-        return null;
+
+        OrderedLinkedListMultiset list = new OrderedLinkedListMultiset();
+        OrderedLinkedListMultiset input = (OrderedLinkedListMultiset) other;
+
+        Node temp = this.headNode;
+        list.headNode = null;
+
+        int found;
+        int eliminated;
+
+        while (temp != null)
+        {
+            Node temp2 = input.headNode;
+            found = 0;
+            eliminated = 0;
+            while (temp2 != null)
+            {
+                if (temp.data.compareTo(temp2.data) == 0)
+                {
+                    found = 1;
+                    if (temp.instances > temp2.instances)
+                    {
+                        temp.instances = temp.instances - temp2.instances;
+                        eliminated = 1;
+                    }
+                    break;
+                }
+                temp2 = temp2.next;
+            }
+            if (found == 0 || eliminated == 1)
+            {
+                Node temp3 = new Node(null, temp.data);
+                temp3.instances = temp.instances;
+                if (list.headNode == null)
+                {
+                    list.headNode = temp3;
+                }
+                else
+                {
+                    OrderedLinkedListMultiset tempList = new OrderedLinkedListMultiset();
+                    tempList.temp = list.headNode;
+
+                    while (tempList.temp.next != null)
+                    {
+                        tempList.temp = tempList.temp.next;
+                    }
+                    temp3 = new Node(null, temp3.data);
+                    tempList.temp.next = temp3;
+                }
+            }
+            temp = temp.next;
+        }
+        return list;
     }
 
 }
