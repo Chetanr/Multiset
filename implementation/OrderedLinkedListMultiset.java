@@ -16,7 +16,6 @@ public class OrderedLinkedListMultiset extends RmitMultiset
 {
 
     Node headNode = null;
-    Node node;
     Node temp;
 
     class Node
@@ -84,7 +83,7 @@ public class OrderedLinkedListMultiset extends RmitMultiset
                     }
                     else if (newNode.data.compareTo(temp.data) > 0)
                     {
-                        if (temp.next == null || newNode.data.compareTo(temp.next.data) == 0)
+                        if (temp.next == null )
                         {
                             if (temp.next.data.equals(newNode.data))
                             {
@@ -187,7 +186,7 @@ public class OrderedLinkedListMultiset extends RmitMultiset
     @Override
 	public boolean contains(String item) {
         Node temp = this.headNode;
-        while (temp.next != null)
+        while (temp != null)
         {
             if (temp.data.equals(item))
             {
@@ -228,15 +227,30 @@ public class OrderedLinkedListMultiset extends RmitMultiset
 
     @Override
 	public String print() {
-        Node temp = this.headNode;
+        Node tempNode = this.headNode;
+        Node tempNode2;
+        Node tempNode3;
         String list = "";
         String temp2;
 
-        while (temp != null)
+
+        while (tempNode != null)
         {
-            temp2 = temp.data.concat(":" + temp.instances);
-            list = temp2.concat("\n".concat(list));
-            temp = temp.next;
+            tempNode2 = tempNode;
+            int instances = 0;
+            tempNode3 = tempNode;
+            while (tempNode2 != null)
+            {
+                if (tempNode2.instances > instances)
+                {
+                    instances = tempNode2.instances;
+                    tempNode3 = tempNode2;
+                }
+                tempNode2 = tempNode2.next;
+            }
+            temp2 = tempNode3.data.concat(":" + tempNode3.instances);
+            list = list.concat(temp2.concat("\n"));
+            tempNode = tempNode.next;
         }
 
         return list;
@@ -246,7 +260,6 @@ public class OrderedLinkedListMultiset extends RmitMultiset
     @Override
 	public String printRange(String lower, String upper) {
         Node temp = this.headNode;
-
         String list = "";
         while (temp.next != null)
         {
@@ -257,7 +270,7 @@ public class OrderedLinkedListMultiset extends RmitMultiset
             temp = temp.next;
         }
         if (list != null)
-            return list.concat("\n");
+            return list;
 
         return null;
     }
@@ -266,63 +279,72 @@ public class OrderedLinkedListMultiset extends RmitMultiset
     @Override
 	public RmitMultiset union(RmitMultiset other) {
 
-        RmitMultiset unionList = new OrderedLinkedListMultiset();
+        OrderedLinkedListMultiset list = new OrderedLinkedListMultiset();
         OrderedLinkedListMultiset input = (OrderedLinkedListMultiset) other;
 
+        Node temp = this.headNode;
+        list.headNode = null;
 
-        Node temp = this.headNode.next;
-        int found = 0;
-
-
-        ((OrderedLinkedListMultiset) unionList).headNode = this.headNode;
-
-        Node temp2 = ((OrderedLinkedListMultiset) unionList).headNode;
-
-        Node temp3 = input.headNode;
-
-
-
-        while (temp.next != null)
+        while(temp != null)
         {
-            Node newNode = new Node();
-            newNode.data = temp.data;
-            newNode.instances = temp.instances;
-            newNode.next = temp.next;
+            Node temp3 = new Node(null, temp.data);
+            temp3.instances = temp.instances;
 
-            temp2.next = newNode;
-
-            temp = temp.next;
-            temp2 = temp2.next;
-        }
-
-
-        while (temp.next != null)
-        {
-            while (temp3.next != null)
+            if (list.headNode == null)
             {
-                if (temp3.data.equals(temp2.data))
+                list.headNode = temp3;
+            }
+            else
+            {
+                OrderedLinkedListMultiset tempList = new OrderedLinkedListMultiset();
+                tempList.temp = list.headNode;
+
+                while (tempList.temp.next != null)
                 {
-                    temp2.instances = temp2.instances + temp3.instances;
-                    found = 1;
-                    break;
+                    tempList.temp = tempList.temp.next;
+
                 }
-
-                temp3 = temp3.next;
+                Node node = new Node (null, temp3.data);
+                node.instances = temp3.instances;
+                tempList.temp.next = node;
             }
-
-            if (found == 0)
-            {
-                Node node = new Node();
-                node.data = temp2.data;
-                node.instances = temp2.instances;
-                node.next = temp2.next;
-
-                temp2.next = node;
-            }
-
             temp = temp.next;
         }
-        return unionList;
+
+        temp = input.headNode;
+        int instances;
+
+        while (temp != null)
+        {
+            if (list.contains(temp.data))
+            {
+                Node temp2 = list.headNode;
+                while (temp2 != null)
+                {
+                        if (temp2.data.compareTo(temp.data) == 0)
+                        {
+                            instances = temp.instances + temp2.instances;
+                            temp2.instances = instances;
+                            break;
+                        }
+                    temp2 = temp2.next;
+                }
+            }
+            else
+            {
+                Node temp3 = list.headNode;
+                while (temp3.next != null)
+                {
+                    temp3 = temp3.next;
+                }
+                Node temp4 = new Node(null, temp.data);
+                temp4.instances = temp.instances;
+                temp3.next = temp4;
+            }
+            temp = temp.next;
+        }
+
+        return list;
     }
 
     @Override
@@ -381,6 +403,7 @@ public class OrderedLinkedListMultiset extends RmitMultiset
 
         int found;
         int eliminated;
+        int instances = 0;
 
         while (temp != null)
         {
@@ -394,8 +417,12 @@ public class OrderedLinkedListMultiset extends RmitMultiset
                     found = 1;
                     if (temp.instances > temp2.instances)
                     {
-                        temp.instances = temp.instances - temp2.instances;
+                        instances = temp.instances - temp2.instances;
                         eliminated = 1;
+                    }
+                    else
+                    {
+                        instances = temp.instances;
                     }
                     break;
                 }
@@ -404,7 +431,7 @@ public class OrderedLinkedListMultiset extends RmitMultiset
             if (found == 0 || eliminated == 1)
             {
                 Node temp3 = new Node(null, temp.data);
-                temp3.instances = temp.instances;
+                temp3.instances = instances;
                 if (list.headNode == null)
                 {
                     list.headNode = temp3;
@@ -419,6 +446,7 @@ public class OrderedLinkedListMultiset extends RmitMultiset
                         tempList.temp = tempList.temp.next;
                     }
                     temp3 = new Node(null, temp3.data);
+                    temp3.instances = instances;
                     tempList.temp.next = temp3;
                 }
             }
