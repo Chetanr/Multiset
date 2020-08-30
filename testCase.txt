@@ -1,0 +1,26 @@
+create s1
+add s1 j
+add s1 j
+add s1 E
+add s1 w
+add s1 E
+removeOne s1 w
+removeOne s1 u
+removeOne s1 D
+removeOne s1 E
+removeOne s1 d
+print s1 
+add s1 m
+add s1 f
+add s1 i
+add s1 m
+add s1 u
+create s2
+add s2 a
+add s2 F
+add s2 v
+add s2 m
+add s2 u
+intersect s1 s2 sI 
+print sI 
+quit

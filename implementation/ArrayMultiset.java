@@ -2,6 +2,8 @@ package implementation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Array implementation of a multiset. See comments in RmitMultiset to
@@ -10,34 +12,31 @@ import java.util.List;
  * @author Jeffrey Chan & Yongli Ren, RMIT 2020
  */
 public class ArrayMultiset extends RmitMultiset {
-
+    /* Memory allocation for Dynamic Array*/
     String[] elements;
     int[] frequency;
-
-
     int count=0;
 
     public ArrayMultiset() {
-        elements = new String[20];
-        frequency = new int[20];
+        elements = new String[3000];
+        frequency = new int[3000];
     }
-
+    /*   Adding elements to Array */
     @Override
     public void add(String elem) {
-        //long startTime=System.nanoTime();
         count++;
         if(count == elements.length )
         {
-            String[] elementsTemp=new String[elements.length * 2];
-            int[] frequencyTemp=new int[frequency.length * 2];
+            String[] elementsTemp = new String[elements.length * 2];
+            int[] frequencyTemp = new int[frequency.length * 2];
 
             for(int i=0;i<elements.length;i++)
             {
-                elementsTemp[i]=elements[i];
-                frequencyTemp[i]=frequency[i];
+                elementsTemp[i] = elements[i];
+                frequencyTemp[i] = frequency[i];
             }
-            elements=elementsTemp;
-            frequency=frequencyTemp;
+            elements = elementsTemp;
+            frequency = frequencyTemp;
         }
         if (elements[0] == null) {
             elements[0] = elem;
@@ -59,10 +58,8 @@ public class ArrayMultiset extends RmitMultiset {
             }
 
         }
-        // long endTime=System.nanoTime();
-        // long timeTaken=endTime-startTime;
     }
-
+    /* Search an element in Array */
     @Override
     public int search(String elem) {
 
@@ -81,6 +78,7 @@ public class ArrayMultiset extends RmitMultiset {
         }
         return searchFailed;
     } // end of search()
+    /* Search the elements by Instances in Array */
 
     @Override
     public List<String> searchByInstance(int instanceCount) {
@@ -100,7 +98,7 @@ public class ArrayMultiset extends RmitMultiset {
         }
         return null;
     } // end of searchByInstance
-
+    /*  Check whether the element is contained in the array */
     @Override
     public boolean contains(String elem) {
         int i = 0;
@@ -113,7 +111,7 @@ public class ArrayMultiset extends RmitMultiset {
         }
         return false;
     } // end of contains()
-
+    /* Remove a element from array */
     @Override
     public void removeOne(String elem) {
         int i = 0;
@@ -131,18 +129,23 @@ public class ArrayMultiset extends RmitMultiset {
         }
 
     } // end of removeOne()
-
+    /*    print the elements added in the array */
     @Override
     public String print() {
-        String outPut = "";
+        Set<String> outPut=new TreeSet<>();
+        String outPutString = "";
         for (int j = 0; j < elements.length; j++) {
             if (elements[j] != null) {
-                outPut += elements[j] + " : " + String.valueOf(frequency[j]) + "\n";
+                outPut.add(elements[j] + " : " + String.valueOf(frequency[j]));
             }
         }
-        return outPut;
+        for(String out:outPut)
+        {
+            outPutString+=out+"\n";
+        }
+        return outPutString;
     } // end of OrderedPrint
-
+    /* Print range : lower to high range of elements in array multisets */
     @Override
     public String printRange(String lower, String upper) {
 
@@ -157,7 +160,7 @@ public class ArrayMultiset extends RmitMultiset {
         }
         return elems;
     } // end of printRange()
-
+    /* Union of  different array multisets */
     @Override
     public RmitMultiset union(RmitMultiset other) {
         int endPoint = 0;
@@ -194,18 +197,18 @@ public class ArrayMultiset extends RmitMultiset {
 
         return union;
     } // end of union()
-
+    /* Intersection of different array multisets  */
     @Override
     public RmitMultiset intersect(RmitMultiset other) {
         int count=0;
         ArrayMultiset otherMultiSet = (ArrayMultiset) other;
         ArrayMultiset intersect = new ArrayMultiset();
-        for (int i = 0; i < elements.length; i++) {
+        for (int i = 0; i <elements.length; i++) {
             if (frequency[i] != 0 && elements[i] != null) {
                 for (int j = 0; j < otherMultiSet.elements.length; j++) {
                     if (otherMultiSet.frequency[j] != 0 && otherMultiSet.elements[j] != null
                             && elements[i].equals(otherMultiSet.elements[j])) {
-                        intersect.elements[count]= elements[i];
+                        intersect.elements[count]=elements[i];
                         intersect.frequency[count]=otherMultiSet.frequency[i]>frequency[j]?frequency[j]:otherMultiSet.frequency[i];
                         count++;
 
@@ -217,7 +220,7 @@ public class ArrayMultiset extends RmitMultiset {
         return intersect;
 
     } // end of intersect()
-
+    /* Difference between different array multisets */
     @Override
     public RmitMultiset difference(RmitMultiset other) {
         boolean found=false;
@@ -246,6 +249,7 @@ public class ArrayMultiset extends RmitMultiset {
                             && elements[i].equals(otherMultiSet.elements[j]) && (frequency[i]-otherMultiSet.frequency[j] ==0 || frequency[i]-otherMultiSet.frequency[j]<0)  )
                     {
                         eliminated=true;
+                        break;
                     }
                 }
 

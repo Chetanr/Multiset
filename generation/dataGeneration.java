@@ -10,10 +10,10 @@ public class dataGeneration
 {
     public dataGeneration()
     {
-        randonDataGenerator();
+        randomDataGenerator();
     }
 
-    public void randonDataGenerator() {
+    public void randomDataGenerator() {
 
         List<String> list= new ArrayList<String>();
 
@@ -30,7 +30,7 @@ public class dataGeneration
 
 
         //for creating add statements for inserting 5 elements
-        for (int i = 1; i <= 5; i++)
+        for (int i = 1; i <= 2500; i++)
         {
             int index = rand.nextInt(32); //because length of random is 32 letters
             temp = temp.append("add s1 ".concat(String.valueOf(random.charAt(index))));
@@ -38,7 +38,7 @@ public class dataGeneration
         }
 
         //for creating removeOne statements
-        for (int i = 1; i <= 5; i++)
+        for (int i = 1; i <= 2500; i++)
         {
             int index = rand.nextInt(32); //because length of random is 32 letters
             temp = temp.append("removeOne s1 ".concat(String.valueOf(random.charAt(index))));
@@ -47,31 +47,40 @@ public class dataGeneration
 
         temp = temp.append("print s1 \n");
 
-        //for creating add statements for inserting 5 elements
-        for (int i = 1; i <= 5; i++)
+        //for creating add statements for inserting elements
+        for (int i = 1; i <= 2500; i++)
         {
             int index = rand.nextInt(32); //because length of random is 32 letters
             temp = temp.append("add s1 ".concat(String.valueOf(random.charAt(index))));
             temp = temp.append("\n");
         }
 
+        //create a second multiset
+        temp.append(create2.concat("\n"));
+
+
         //for creating add statements for inserting 5 elements
-        for (int i = 1; i <= 5; i++)
+        for (int i = 1; i <= 2500; i++)
         {
             int index = rand.nextInt(32); //because length of random is 32 letters
             temp = temp.append("add s2 ".concat(String.valueOf(random.charAt(index))));
             temp = temp.append("\n");
         }
 
-        temp = temp.append("intersect s1 s2 sU \n");
+        //statements to perfrom intersection and print the set
+        temp = temp.append("intersect s1 s2 sI \n");
+        temp = temp.append("print sI \n");
+
+        temp = temp.append("quit");
 
 
         try {
-            FileWriter fw = new FileWriter("testCase.txt");
+            FileWriter fw = new FileWriter("./generation/testCase3.in");
             fw.write(temp.toString());
             fw.close();
         } catch (Exception e) {
             System.out.println(e);
         }
     }
+
 }

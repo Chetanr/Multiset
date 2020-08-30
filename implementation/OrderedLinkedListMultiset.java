@@ -15,6 +15,7 @@ import java.util.List;
 public class OrderedLinkedListMultiset extends RmitMultiset
 {
 
+    //headnode for the list to be maintained based on alphabetical order
     Node headNode = null;
     Node temp;
 
@@ -30,19 +31,11 @@ public class OrderedLinkedListMultiset extends RmitMultiset
             this.data = item;
             this.instances = 1;
         }
-
-        public Node ()
-        {
-            this.next = null;
-            this.data = null;
-            this.instances = 1;
-        }
-
     }
 
+    //method to add the elements into the list
     @Override
 	public void add(String item) {
-
         Node newNode = new Node(null, item);
         int instances = 1;
         int count = 0;
@@ -137,6 +130,8 @@ public class OrderedLinkedListMultiset extends RmitMultiset
         }
     }
 
+
+    //method to search a given element in the list
     @Override
 	public int search(String item) {
         Node temp = this.headNode;
@@ -164,6 +159,7 @@ public class OrderedLinkedListMultiset extends RmitMultiset
     }
 
 
+    //method to search the elements based on the instance count
     @Override
 	public List<String> searchByInstance(int instanceCount) {
         Node temp = this.headNode;
@@ -183,6 +179,7 @@ public class OrderedLinkedListMultiset extends RmitMultiset
     }
 
 
+    //method to check if the given element is in the list
     @Override
 	public boolean contains(String item) {
         Node temp = this.headNode;
@@ -198,6 +195,7 @@ public class OrderedLinkedListMultiset extends RmitMultiset
     }
 
 
+    //method to remove the given element from the list
     @Override
 	public void removeOne(String item) {
         Node temp1 = this.headNode;
@@ -225,6 +223,7 @@ public class OrderedLinkedListMultiset extends RmitMultiset
     }
 
 
+    //method to print all the elements in the list
     @Override
 	public String print() {
         Node tempNode = this.headNode;
@@ -252,11 +251,11 @@ public class OrderedLinkedListMultiset extends RmitMultiset
             list = list.concat(temp2.concat("\n"));
             tempNode = tempNode.next;
         }
-
         return list;
     }
 
 
+    //method to print the elements in the list in between a given range
     @Override
 	public String printRange(String lower, String upper) {
         Node temp = this.headNode;
@@ -276,6 +275,7 @@ public class OrderedLinkedListMultiset extends RmitMultiset
     }
 
 
+    //method to find the union of 2 lists
     @Override
 	public RmitMultiset union(RmitMultiset other) {
 
@@ -347,9 +347,10 @@ public class OrderedLinkedListMultiset extends RmitMultiset
         return list;
     }
 
+
+    //method to find the intersection of 2 lists
     @Override
     public RmitMultiset intersect(RmitMultiset other) {
-
         OrderedLinkedListMultiset list = new OrderedLinkedListMultiset();
         OrderedLinkedListMultiset input = (OrderedLinkedListMultiset) other;
 
@@ -391,7 +392,7 @@ public class OrderedLinkedListMultiset extends RmitMultiset
     }
 
 
-
+    //method to find the difference between 2 lists
     @Override
 	public RmitMultiset difference(RmitMultiset other) {
 
